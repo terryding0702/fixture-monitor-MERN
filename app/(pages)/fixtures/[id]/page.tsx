@@ -5,12 +5,14 @@ import { FixtureType } from '@/app/types/fixtureType';
 import { dataConvert } from '@/app/utils/dateConverter';
 import { notFound } from 'next/navigation';
 
-interface Props {
-  params: { id: string };
-}
-
-export default async function FixtureDetailPage({ params: { id } }: Props) {
+export default async function FixtureDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   await dbConnection();
+
+  const { id } = await params;
 
   const fixture = (await fixtureModel.findById(id)) as FixtureType | null;
   if (!fixture) return notFound();
